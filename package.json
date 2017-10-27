@@ -20,7 +20,15 @@
   },
   "homepage": "https://github.com/preboot/angularjs-webpack",
   "dependencies": {
-    "angular": "^1.5.0"
+    "angular": "^1.5.0",
+    "bootstrap-loader": "^2.2.0",
+    "bootstrap-sass": "^3.3.7",
+    "css-loader": "^0.26.1",
+    "node-sass": "^4.5.3",
+    "resolve-url-loader": "^2.1.1",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.13.2",
+    "url-loader": "^0.6.2"
   },
   "devDependencies": {
     "angular-mocks": "^1.5.0",
@@ -50,8 +58,6 @@
     "rimraf": "^2.5.1",
     "style-loader": "^0.13.0",
     "webpack": "2.2.0",
-    "webpack-dev-server": "2.2.0",
-    "bootstrap": "3.3.7",
-    "jquery": "3.2.1"
+    "webpack-dev-server": "2.2.0"
   }
 }

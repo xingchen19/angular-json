@@ -1,11 +1,17 @@
 /* styles in src/style directory are applied to the whole page */
 body {
   background: #f6fcea;
-  color: #03a9f4;
+  /*color: #03a9f4;*/
 }
 
 a {
   color: #03A9F4;
+}
+
+h1 {
+  text-align: center;
+  color: #03A9F4;
+  display: block; 
 }
 
 main {

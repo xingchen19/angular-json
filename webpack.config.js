@@ -30,7 +30,8 @@ module.exports = function makeWebpackConfig() {
    * Karma will set this when it's a test build
    */
   config.entry = isTest ? void 0 : {
-    app: './src/app/app.js'
+    app: './src/app/app.js',
+    bootstrap: 'bootstrap-loader'
   };
 
   /**
@@ -45,7 +46,8 @@ module.exports = function makeWebpackConfig() {
 
     // Output path from the view of the page
     // Uses webpack-dev-server in development
-    publicPath: isProd ? '/' : 'http://0.0.0.0:8080/',
+    // publicPath: isProd ? '/' : 'http://0.0.0.0:8080/',
+    publicPath: isProd ? '/' : 'http://localhost:8080/',
 
     // Filename for entry points
     // Only adds hash in build mode
@@ -89,34 +91,34 @@ module.exports = function makeWebpackConfig() {
       loader: 'babel-loader',
       exclude: /node_modules/
     }, {
-      // CSS LOADER
-      // Reference: https://github.com/webpack/css-loader
-      // Allow loading css through js
-      //
-      // Reference: https://github.com/postcss/postcss-loader
-      // Postprocess your css with PostCSS plugins
-      test: /\.css$/,
-      // Reference: https://github.com/webpack/extract-text-webpack-plugin
-      // Extract css files in production builds
-      //
-      // Reference: https://github.com/webpack/style-loader
-      // Use style-loader in development.
+    //   // CSS LOADER
+    //   // Reference: https://github.com/webpack/css-loader
+    //   // Allow loading css through js
+    //   //
+    //   // Reference: https://github.com/postcss/postcss-loader
+    //   // Postprocess your css with PostCSS plugins
+    //   test: /\.css$/,
+    //   // Reference: https://github.com/webpack/extract-text-webpack-plugin
+    //   // Extract css files in production builds
+    //   //
+    //   // Reference: https://github.com/webpack/style-loader
+    //   // Use style-loader in development.
 
-      loader: isTest ? 'null-loader' : ExtractTextPlugin.extract({
-        fallbackLoader: 'style-loader',
-        loader: [
-          {loader: 'css-loader', query: {sourceMap: true}},
-          {loader: 'postcss-loader'}
-        ],
-      })
-    }, {
+    //   loader: isTest ? 'null-loader' : ExtractTextPlugin.extract({
+    //     fallbackLoader: 'style-loader',
+    //     loader: [
+    //       {loader: 'css-loader', query: {sourceMap: true}},
+    //       {loader: 'postcss-loader'}
+    //     ],
+    //   })
+    // }, {
       // ASSET LOADER
       // Reference: https://github.com/webpack/file-loader
       // Copy png, jpg, jpeg, gif, svg, woff, woff2, ttf, eot files to output
       // Rename the file using the asset hash
       // Pass along the updated reference to your code
       // You can add here any file extension you want to get copied to your output
-      test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|json)$/,
+      test: /\.(png|jpg|jpeg|gif|json)$/,
       loader: 'file-loader'
     }, {
       // HTML LOADER
@@ -124,8 +126,23 @@ module.exports = function makeWebpackConfig() {
       // Allow loading html through js
       test: /\.html$/,
       loader: 'raw-loader'
-    }]
-  };
+    }, { 
+      test: /\.css$/, 
+      loader: 'style-loader!css-loader' 
+    }, {
+      test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, 
+      loader: "file-loader"
+    }, { 
+      test: /\.(woff|woff2)$/, 
+      loader:"url-loader?prefix=font/&limit=5000"
+    }, { 
+      test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, 
+      loader: "url-loader?limit=10000&mimetype=application/octet-stream" 
+    }, { 
+      test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, 
+      loader: "url-loader?limit=10000&mimetype=image/svg+xml" 
+      }
+  ]};
 
   // ISTANBUL LOADER
   // https://github.com/deepsweet/istanbul-instrumenter-loader
@@ -216,8 +233,8 @@ module.exports = function makeWebpackConfig() {
    * Reference: http://webpack.github.io/docs/webpack-dev-server.html
    */
   config.devServer = {
-    host: '0.0.0.0',
-    port: 8080,
+    // host: '0.0.0.0',
+    // port: 8080,
     contentBase: './src/public',
     stats: 'minimal'
   };

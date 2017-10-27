@@ -1,6 +1,7 @@
-/* use strict */
+  /* use strict */
 import angular from 'angular';
-// import '../style/app.css';
+// import 'bootstrap-loader';
+import '../style/app.css';
 
 var app = angular.module("loadJsonApp", []);
 var jsonUrl = "../json/"
@@ -33,7 +34,7 @@ app.service("loadJsonService",function ($http, $q){
   var promise = loadJsonNameService.getplayers();
   promise.then(function (data){
     $scope.jsons = data.data;
-    console.log($scope.jsons);
+    console.log($scope.jsons[0]);
     var promise = loadJsonService.getplayers();
     promise.then(function(data){
       $scope.jsonData = data;
