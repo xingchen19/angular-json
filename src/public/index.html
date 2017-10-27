@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="//apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <title>ESP Records</title>
+</head>
+<body ng-app="loadJsonApp" ng-controller="loadJsonCtrl">
+    <h1 class="title">ESP Records</h1>
+	<table class="table table-striped table-bordered">
+		<thead>
+			<tr><th>编码</th><th>名称</th><th>科属</th><th>别名</th><th>操作</th></tr>
+		</thead>
+		<tbody ng-repeat="i in jsonData">
+			<td>{{i.id}}</td>
+			<td>{{i.name}}</td>
+			<td>{{i.family}}</td>
+			<td>{{i.alias}}</td>
+			<td>
+				<button type="button" class="btn btn-default btn" ng-click="edit($index);"><i class="glyphicon glyphicon-pencil"></i></button>  
+				<button type="button" class="btn btn-default btn" ng-click="delete();"><i class="glyphicon glyphicon-trash"></i></button> 
+			</td>
+		</tbody>
+	</table>
+</body>
+</html>
