@@ -2,46 +2,53 @@
 import angular from 'angular';
 import '../style/app.css';
 
-global.jQuery = global.$ = require('jquery');
+global.jQuery = require('jquery');
 require('bootstrap-loader');
 
-var app = angular.module("loadJsonApp", []);
 var jsonUrl = "../json/"
 
+var app = angular.module("loadJsonApp", []);
+
 app.service("loadJsonNameService",function ($http,$q){
-  var jsonNames = $q.defer();
-  $http.get(jsonUrl).then(function (jsonNameData) {
-    jsonNames.resolve(jsonNameData);
+  var deferred = $q.defer();
+  $http.get(jsonUrl).then(function (jsonNames) {
+    deferred.resolve(jsonNames);
   });
   this.getplayers = function ()
-  {
-    return jsonNames.promise;
-  }
-})
-
-app.service("loadJsonService",function ($http, $q){
-  var deferred = $q.defer();
-  $http.get(jsonUrl + 'demo.json').then(function(data)
-  {
-    deferred.resolve(data);
-  });
-
-  this.getplayers =function ()
   {
     return deferred.promise;
   }
 })
 
-.controller("loadJsonCtrl", function($scope, loadJsonNameService, loadJsonService){
+app.service("loadJsonDataService",function ($http, $q, loadJsonNameService){
   var promise = loadJsonNameService.getplayers();
-  promise.then(function (data){
-    $scope.jsons = data.data;
-    console.log($scope.jsons);
-    var promise = loadJsonService.getplayers();
-    promise.then(function(data){
-      $scope.jsonData = data;
-      console.log($scope.jsonData);
-    });
-  });
+  var jsonData = new Array();
 
+  this.getJsonData = function (callback)
+  {
+    promise.then(function (data){
+      var jsons = data.data;
+      for ( var i in jsons) {
+        jQuery.ajax({
+          url: jsonUrl + jsons[i],
+          async: false,
+          dataType: 'json',
+          success: function(result) {
+            jsonData.push(result);
+          }
+        });
+      }
+      console.log("jsonData in service====");
+      console.log(jsonData);
+      callback(jsonData);
+    });
+  }
+})
+
+.controller("loadJsonCtrl", function($scope, loadJsonDataService){
+  loadJsonDataService.getJsonData(function(data){
+    $scope.jsonData = data;
+    console.log("jsonData in controller====");
+    console.log($scope.jsonData);
+  });
 })
