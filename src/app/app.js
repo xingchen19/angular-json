@@ -1,15 +1,15 @@
-  /* use strict */
+
 import angular from 'angular';
 import '../style/app.css';
 
 global.jQuery = require('jquery');
 require('bootstrap-loader');
 
-var jsonUrl = "../json/"
+var jsonUrl = "/json/"
 
 var app = angular.module("loadJsonApp", []);
 
-app.service("loadJsonNameService",function ($http,$q){
+app.service("loadJsonNameService",['$http', '$q', function ($http,$q){
   var deferred = $q.defer();
   $http.get(jsonUrl).then(function (jsonNames) {
     deferred.resolve(jsonNames);
@@ -18,9 +18,9 @@ app.service("loadJsonNameService",function ($http,$q){
   {
     return deferred.promise;
   }
-})
+}])
 
-app.service("loadJsonDataService",function ($http, $q, loadJsonNameService){
+app.service("loadJsonDataService", ['loadJsonNameService', function (loadJsonNameService){
   var promise = loadJsonNameService.getplayers();
   var jsonData = new Array();
 
@@ -38,17 +38,17 @@ app.service("loadJsonDataService",function ($http, $q, loadJsonNameService){
           }
         });
       }
-      console.log("jsonData in service====");
-      console.log(jsonData);
+      // console.log("jsonData in service====");
+      // console.log(jsonData);
       callback(jsonData);
     });
   }
-})
+}])
 
-.controller("loadJsonCtrl", function($scope, loadJsonDataService){
+app.controller('loadJsonCtrl',['$scope', 'loadJsonDataService', function($scope, loadJsonDataService){
   loadJsonDataService.getJsonData(function(data){
     $scope.jsonData = data;
-    console.log("jsonData in controller====");
-    console.log($scope.jsonData);
+    // console.log("jsonData in controller====");
+    // console.log($scope.jsonData);
   });
-})
+}]) 
