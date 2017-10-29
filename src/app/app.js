@@ -1,54 +1,31 @@
 
 import angular from 'angular';
+import 'angular-route';
 import '../style/app.css';
 
 global.jQuery = require('jquery');
 require('bootstrap-loader');
 
 var jsonUrl = "/json/"
+var jsonName = "esp-"
 
-var app = angular.module("loadJsonApp", []);
+var app = angular.module("JsonRecordApp", ["ngRoute"]);
 
-app.service("loadJsonNameService",['$http', '$q', function ($http,$q){
-  var deferred = $q.defer();
-  $http.get(jsonUrl).then(function (jsonNames) {
-    deferred.resolve(jsonNames);
+app.config(function($routeProvider, $locationProvider){
+  $routeProvider
+  .when('/add',{
+    templateUrl: 'add.html',
+    controller: 'addCtrl'
+  })
+  .when('/get',{
+    templateUrl: 'get.html',
+    controller: 'getCtrl'
+  })
+  .when('/modify',{
+    templateUrl: 'modify.html',
+    controller: 'modifyCtrl'
+  })
+  .otherwise({
+    redirectTo: '/get'
   });
-  this.getplayers = function ()
-  {
-    return deferred.promise;
-  }
-}])
-
-app.service("loadJsonDataService", ['loadJsonNameService', function (loadJsonNameService){
-  var promise = loadJsonNameService.getplayers();
-  var jsonData = new Array();
-
-  this.getJsonData = function (callback)
-  {
-    promise.then(function (data){
-      var jsons = data.data;
-      for ( var i in jsons) {
-        jQuery.ajax({
-          url: jsonUrl + jsons[i],
-          async: false,
-          dataType: 'json',
-          success: function(result) {
-            jsonData.push(result);
-          }
-        });
-      }
-      // console.log("jsonData in service====");
-      // console.log(jsonData);
-      callback(jsonData);
-    });
-  }
-}])
-
-app.controller('loadJsonCtrl',['$scope', 'loadJsonDataService', function($scope, loadJsonDataService){
-  loadJsonDataService.getJsonData(function(data){
-    $scope.jsonData = data;
-    // console.log("jsonData in controller====");
-    // console.log($scope.jsonData);
-  });
-}]) 
+});
